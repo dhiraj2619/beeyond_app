@@ -15,12 +15,13 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {faStar} from '@fortawesome/free-solid-svg-icons';
 import {useDispatch, useSelector} from 'react-redux';
 import {fetchProducts} from '../../redux/actions/ProductAction';
-import {useCart} from '../../context/CartContext';
+
 import {AddtoCart} from '../../redux/actions/CartAction';
+import {INCREMENT_QUANTITY} from '../../redux/constants/CartConstant';
 
 const Products = () => {
   const products = useSelector(state => state.products.products);
-
+  const {cart} = useSelector(state => state.cart);
   const dispatch = useDispatch();
   const [loadingId, setLoadingId] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -31,12 +32,21 @@ const Products = () => {
   }, [dispatch]);
 
   const handleAddtoCart = product => {
-    setLoadingId(product.id);
-    setTimeout(() => {
-      setLoadingId(null);
-      setSelectedProduct(product);
-      setModalVisible(true);
-    }, 2000);
+    const isProductInCart = cart.some(item => item.id === product.id);
+
+    if (!isProductInCart) {
+      setLoadingId(product.id);
+      setTimeout(() => {
+        setLoadingId(null);
+        setSelectedProduct(product);
+        setModalVisible(true);
+      }, 2000);
+    } else {
+      dispatch({
+        type: INCREMENT_QUANTITY,
+        payload: product.id,
+      });
+    }
   };
 
   const handleContinue = () => {
