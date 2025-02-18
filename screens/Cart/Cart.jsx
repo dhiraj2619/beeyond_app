@@ -18,22 +18,32 @@ import PlusIcon from 'react-native-vector-icons/Feather';
 import DownArrowIcon from 'react-native-vector-icons/Entypo';
 import MinusIcon from 'react-native-vector-icons/Entypo';
 import {useDispatch, useSelector} from 'react-redux';
-import {decrementQuantity, incrementQuantity, RemovefromCart} from '../../redux/actions/CartAction';
+import {
+  decrementQuantity,
+  incrementQuantity,
+  RemovefromCart,
+} from '../../redux/actions/CartAction';
+import {AddNotification} from '../../redux/actions/NotificationAction';
+import Notification from '../../components/Notification/Notification';
 
 const Cart = ({navigation}) => {
+  const {notifications} = useSelector(state => state.notifications);
   const dispatch = useDispatch();
   const {cart} = useSelector(state => state.cart);
 
   const handleRemoveFromCart = productId => {
     dispatch(RemovefromCart(productId));
+    dispatch(AddNotification('Cart quantity updated successfully !'));
   };
 
   const handleIncrementQuantity = productId => {
     dispatch(incrementQuantity(productId));
+    dispatch(AddNotification('Cart quantity updated successfully !'));
   };
 
   const handleDecrementQuantity = productId => {
     dispatch(decrementQuantity(productId));
+    dispatch(AddNotification('Cart quantity updated successfully !'));
   };
   return (
     <SafeAreaView style={[globalStyle.flex, globalStyle.bgTheme]}>
@@ -132,7 +142,7 @@ const Cart = ({navigation}) => {
 
                   <View style={[globalStyle.drow, globalStyle.alignCenter]}>
                     <View style={globalStyle.dcol}>
-                      <Text style={CartStyle.itemTotalAmount}>₹ 200</Text>
+                      <Text style={CartStyle.itemTotalAmount}>₹ {item.price * item.quantity}</Text>
                       <Text style={globalStyle.xsSmall}>price details</Text>
                     </View>
                     <View>
@@ -184,6 +194,9 @@ const Cart = ({navigation}) => {
           </View>
         </ScrollView>
       )}
+      {notifications.map(notification => (
+        <Notification key={notification.id} message={notification.message} />
+      ))}
     </SafeAreaView>
   );
 };

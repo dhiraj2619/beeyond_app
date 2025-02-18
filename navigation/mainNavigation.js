@@ -23,6 +23,7 @@ import {globalStyle} from '../assets/styles/globalStyle';
 import {CartStyle} from '../screens/Cart/Style';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
+import ProductDetail from '../screens/ProductDetails/ProductDetails';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -145,6 +146,15 @@ export const MainNavigation = () => {
       <Stack.Screen
         name="Products"
         component={Products}
+        options={({navigation}) => ({
+          headerLeft: () => <CustomBackButton navigation={navigation} />,
+          headerTitleStyle: {fontSize: scaleFontSize(17)},
+          headerRight: () => <Text>Hello</Text>,
+        })}
+      />
+      <Stack.Screen
+        name="ProductDetail"
+        component={ProductDetail}
         options={({navigation}) => ({
           headerLeft: () => <CustomBackButton navigation={navigation} />,
           headerTitleStyle: {fontSize: scaleFontSize(17)},

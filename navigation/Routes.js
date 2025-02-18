@@ -7,4 +7,5 @@ export const Routes = {
   Login: 'Login',
   Mobilelogin: 'Mobilelogin',
   OtpScreen: 'OtpScreen',
+  ProductDetail: 'ProductDetail',
 };
